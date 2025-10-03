@@ -1,6 +1,17 @@
 version: '3.8'
 
 services:
+    frontend:
+        build:
+            context: .
+            dockerfile: app/Dockerfile
+        environment:
+            APP_GQL_ENDPOINT: http://backend:8080/graphql
+        ports:
+            - "5173:80"
+        depends_on:
+            - backend
+
     backend:
         build: ./server
         ports:
