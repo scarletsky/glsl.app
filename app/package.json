@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "pnpm run gql-gen && pnpm exec vite build && pnpm run html-php-rename",
+    "build": "pnpm run gql-gen && pnpm exec vite build && node scripts/sitemap.mjs dist && pnpm run html-php-rename",
     "html-php-rename": "mv dist/index.html dist/index.php",
     "preview": "vite preview",
     "gql-gen": "graphql-codegen --config scripts/gql-gen.ts",
