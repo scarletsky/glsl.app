@@ -121,6 +121,8 @@ import { currentShader } from "@/App.vue";
 import { getAllShaders, updateShader } from "@/storage2";
 import { onUnmounted } from "vue";
 
+const appBaseUrl = import.meta.env.APP_BASE_URL.replace(/\/$/, "");
+
 const { t, locale } = useI18n();
 
 let isFileMenuShown = $shallowRef<boolean>(false);
@@ -204,7 +206,7 @@ const onShareLinkClick = async () => {
         }
 
         navigator.clipboard
-          .writeText("https://glsl.app#" + base64urlnopad.encode(data))
+          .writeText(`${appBaseUrl}#${base64urlnopad.encode(data)}`)
           .then(() => useToast(t("link-copied")));
       }
     );
@@ -223,9 +225,7 @@ const onShareLinkClick = async () => {
 
     // @todo store the hash in db for current shader
 
-    navigator.clipboard
-      .writeText("https://glsl.app#" + hash)
-      .then(() => useToast(t("link-copied")));
+    navigator.clipboard.writeText(`${appBaseUrl}#${hash}`).then(() => useToast(t("link-copied")));
   }
 };
 

@@ -26,8 +26,7 @@ RUN --mount=type=cache,id=pnpm-store,target=/root/.local/share/pnpm/store,sharin
 
 COPY app/ ./
 
-RUN pnpm run build \
-  && cp public/seo-header.php dist/seo-header.php
+RUN pnpm run build
 
 FROM php:8.3-apache AS runtime
 

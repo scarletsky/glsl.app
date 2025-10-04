@@ -4,6 +4,7 @@
 
 interface ImportMetaEnv {
   APP_GQL_ENDPOINT: string;
+  APP_BASE_URL: string;
 }
 
 declare module "octicons:*" {
