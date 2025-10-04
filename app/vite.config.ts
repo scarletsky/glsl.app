@@ -14,6 +14,8 @@ import cssm, { removeCssModulesChunk } from "vite-plugin-vue-css-modules";
 
 import { visualizer } from "rollup-plugin-visualizer";
 
+import { viteStaticCopy } from 'vite-plugin-static-copy';
+
 import { resolve } from "path";
 
 const title = "Online WebGL (GLSL) Shaders Editor and Playground";
@@ -139,6 +141,12 @@ export default defineConfig(({ command }) => ({
         },
       },
     },
+
+    command === "build" && viteStaticCopy({
+      targets: [
+        { src: 'public/seo-header.php', dest: '' }
+      ]
+    }),
 
     visualizer({
       filename: "stats-compressed.html",
