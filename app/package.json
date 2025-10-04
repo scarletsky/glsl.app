@@ -6,16 +6,16 @@
   "scripts": {
     "dev": "vite",
     "build": "pnpm run gql-gen && pnpm exec vite build && pnpm run html-php-rename",
-    "html-php-rename": "powershell -Command \"Move-Item dist/index.html dist/index.php\"",
+    "html-php-rename": "mv dist/index.html dist/index.php",
     "preview": "vite preview",
-    "gql-gen": "graphql-codegen --config scripts\\gql-gen.ts",
-    "gql-gen:watch": "graphql-codegen --config scripts\\gql-gen.ts --watch",
+    "gql-gen": "graphql-codegen --config scripts/gql-gen.ts",
+    "gql-gen:watch": "graphql-codegen --config scripts/gql-gen.ts --watch",
     "format": "prettier --config .prettierrc -w \"./src/**/*.{vue,ts}\""
   },
   "dependencies": {
     "@primer/octicons": "^19.15.1",
     "@scure/base": "^1.2.4",
-    "@shaderfrog/glsl-parser": "link:..\\..\\glsl-parser",
+    "@shaderfrog/glsl-parser": "link:../../glsl-parser",
     "@tweakpane/core": "^1.1.9",
     "@urql/vue": "^1.4.2",
     "fflate": "^0.8.2",
@@ -72,7 +72,7 @@
       "monaco-editor": "patches/monaco-editor.patch"
     },
     "overrides": {
-      "@shaderfrog/glsl-parser": "link:..\\..\\glsl-parser"
+      "@shaderfrog/glsl-parser": "link:../../glsl-parser"
     }
   }
 }

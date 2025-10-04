@@ -39,8 +39,8 @@ dependencies {
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
-    implementation(platform("com.netflix.graphql.dgs:graphql-dgs-platform-dependencies:latest.release"))
-    implementation("com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter")
+    implementation(platform("com.netflix.graphql.dgs:graphql-dgs-platform-dependencies:8.7.1"))
+    implementation("com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter:8.7.1")
     implementation("me.paulschwarz:spring-dotenv:4.0.0")
     implementation("com.auth0:java-jwt:4.4.0")
     implementation("io.github.thibaultmeyer:cuid:2.0.2")
@@ -48,7 +48,7 @@ dependencies {
 
 dependencyManagement {
     imports {
-        mavenBom("com.netflix.graphql.dgs:graphql-dgs-platform-dependencies:latest.release")
+        mavenBom("com.netflix.graphql.dgs:graphql-dgs-platform-dependencies:8.7.1")
     }
 }
 
