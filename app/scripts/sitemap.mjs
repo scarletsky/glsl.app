@@ -10,11 +10,16 @@ const pages = languages.map(lang => ({
   priority: "1.0",
 }));
 
-const appBaseUrl = process.env.APP_BASE_URL?.replace(/\/$/, "");
+const appBaseUrlRaw = (process.env.APP_BASE_URL ?? "").trim();
 
-if (!appBaseUrl) {
-  throw new Error("APP_BASE_URL must be defined");
+if (!appBaseUrlRaw || appBaseUrlRaw === "/") {
+  console.warn(
+    "[sitemap] APP_BASE_URL is empty or '/', skipping sitemap generation."
+  );
+  process.exit(0);
 }
+
+const appBaseUrl = appBaseUrlRaw.replace(/\/$/, "");
 
 const xmlEntries = pages
   .map(

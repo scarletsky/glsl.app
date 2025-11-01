@@ -121,7 +121,15 @@ import { currentShader } from "@/App.vue";
 import { getAllShaders, updateShader } from "@/storage2";
 import { onUnmounted } from "vue";
 
-const appBaseUrl = import.meta.env.APP_BASE_URL.replace(/\/$/, "");
+const resolveAppBaseUrl = () => {
+  const raw = (import.meta.env.APP_BASE_URL ?? "").trim();
+  if (raw === "" || raw === "/") {
+    return window.location.origin;
+  }
+  return raw.replace(/\/$/, "");
+};
+
+const appBaseUrl = resolveAppBaseUrl();
 
 const { t, locale } = useI18n();
 

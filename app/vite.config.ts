@@ -25,11 +25,18 @@ const description =
 // https://vitejs.dev/config/
 export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
-  const appBaseUrlRaw = env.APP_BASE_URL ?? "";
-  const appBaseUrl = appBaseUrlRaw.replace(/\/$/, "");
+  const appBaseUrlRaw = (env.APP_BASE_URL ?? "").trim();
+  const useRuntimeOrigin = appBaseUrlRaw === "" || appBaseUrlRaw === "/";
+  const appBaseUrl = useRuntimeOrigin ? "/" : appBaseUrlRaw.replace(/\/$/, "");
 
-  if (!appBaseUrl) {
+  if (!useRuntimeOrigin && !appBaseUrl) {
     throw new Error("APP_BASE_URL must be defined");
+  }
+
+  if (useRuntimeOrigin) {
+    console.warn(
+      "[vite] APP_BASE_URL is empty or '/', falling back to window.location.origin at runtime; generated HTML will use relative URLs."
+    );
   }
 
   return {
@@ -122,7 +129,8 @@ export default defineConfig(({ command, mode }) => {
       {
         name: "html:inject-app-base-url",
         transformIndexHtml(html) {
-          return html.replaceAll("%base%", appBaseUrl);
+          const htmlBase = useRuntimeOrigin ? "" : appBaseUrl;
+          return html.replaceAll("%base%", htmlBase);
         },
       },
 
@@ -134,7 +142,10 @@ export default defineConfig(({ command, mode }) => {
             html
               .replaceAll("%title", "<?=$title?>")
               .replaceAll("%desc", "<?=$desc?>")
-              .replaceAll("%img", `${appBaseUrl}/icon-1.5-512.png`)
+              .replaceAll(
+                "%img",
+                `${useRuntimeOrigin ? "" : appBaseUrl}/icon-1.5-512.png`
+              )
           );
         },
       },
