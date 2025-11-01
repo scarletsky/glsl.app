@@ -5,15 +5,18 @@ services:
         build:
             context: .
             dockerfile: app/Dockerfile
-        environment:
-            APP_GQL_ENDPOINT: http://backend:8080/graphql
+            args:
+                APP_BASE_URL: ${APP_BASE_URL:-http://localhost:5173}
+                APP_GQL_ENDPOINT: ${APP_GQL_ENDPOINT:-http://backend:8080/graphql}
         ports:
             - "5173:80"
         depends_on:
             - backend
 
     backend:
-        build: ./server
+        build:
+            context: ./server
+            network: host
         ports:
             - "8080:8080"
         environment:

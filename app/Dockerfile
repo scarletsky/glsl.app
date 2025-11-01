@@ -1,8 +1,13 @@
 FROM node:20-bookworm AS builder
 
-RUN apt-get update && apt-get install -y --no-install-recommends git && rm -rf /var/lib/apt/lists/*
-RUN corepack enable
-RUN corepack prepare pnpm@9.15.4 --activate
+ARG APP_BASE_URL
+ARG APP_GQL_ENDPOINT
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends git \
+    && rm -rf /var/lib/apt/lists/* \
+    && corepack enable \
+    && corepack prepare pnpm@9.15.4 --activate
 
 WORKDIR /workspace
 
@@ -26,13 +31,21 @@ RUN --mount=type=cache,id=pnpm-store,target=/root/.local/share/pnpm/store,sharin
 
 COPY app/ ./
 
-RUN pnpm run build
+RUN if [ -n "$APP_BASE_URL" ] || [ -n "$APP_GQL_ENDPOINT" ]; then \
+        rm -f .env.production.local && \
+        touch .env.production.local && \
+        { [ -z "$APP_BASE_URL" ] || echo "APP_BASE_URL=$APP_BASE_URL" >> .env.production.local; } && \
+        { [ -z "$APP_GQL_ENDPOINT" ] || echo "APP_GQL_ENDPOINT=$APP_GQL_ENDPOINT" >> .env.production.local; }; \
+    fi && \
+    pnpm run build
 
 FROM php:8.3-apache AS runtime
 
 WORKDIR /var/www/html
 
-COPY --from=builder /workspace/glsl.app/app/dist/ ./
+RUN rm -rf /var/www/html/*
+
+COPY --from=builder --chown=www-data:www-data /workspace/glsl.app/app/dist/ ./
 
 EXPOSE 80
 
